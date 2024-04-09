@@ -25,15 +25,15 @@ public class TownController {
 	
 	@GetMapping
 	 public Set<Town> getTowns(){
-		return towns;
+		return this.towns;
 	 };
 	 
 	 @PostMapping
 	 public ResponseEntity<String> postTown(@RequestBody Town town) {
-		 if(towns.contains(town)) {
+		 if(this.towns.contains(town)) {
 			 return new ResponseEntity<String>("La ville existe déjà", HttpStatus.BAD_REQUEST);
 		 }
-		 towns.add(town);
+		 this.towns.add(town);
 		 return new ResponseEntity<String>("Ville insérée avec succès", HttpStatus.OK);
 	 }
 }

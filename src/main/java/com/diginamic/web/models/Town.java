@@ -28,8 +28,11 @@ public class Town {
 	
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) 
+        	return true;
+        if (o == null || getClass() != o.getClass()) 
+        	return false;
+        
         Town town = (Town) o;
         return nbHab == town.nbHab && Objects.equals(name, town.name);
     }
