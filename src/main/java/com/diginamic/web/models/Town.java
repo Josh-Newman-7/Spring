@@ -5,7 +5,21 @@ import java.util.Objects;
 public class Town {
 	private String name;
 	private int nbHab;
+	private int id;
 	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public Town(String name, int nbHab, int id) {
+		super();
+		this.name = name;
+		this.nbHab = nbHab;
+		this.id = id;
+	}
 	public String getName() {
 		return name;
 	}
@@ -20,11 +34,6 @@ public class Town {
 		this.nbHab = nbHab;
 	}
 
-	public Town(String name, int nbHab) {
-		super();
-		this.name = name;
-		this.nbHab = nbHab;
-	}
 	
     @Override
     public boolean equals(Object o) {
@@ -34,11 +43,11 @@ public class Town {
         	return false;
         
         Town town = (Town) o;
-        return nbHab == town.nbHab && Objects.equals(name, town.name);
+        return this.id == town.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, nbHab);
+        return Objects.hash(id);
     }
 }
