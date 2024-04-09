@@ -1,5 +1,7 @@
 package com.diginamic.web.models;
 
+import java.util.Objects;
+
 public class Town {
 	private String name;
 	private int nbHab;
@@ -24,4 +26,16 @@ public class Town {
 		this.nbHab = nbHab;
 	}
 	
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Town town = (Town) o;
+        return nbHab == town.nbHab && Objects.equals(name, town.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, nbHab);
+    }
 }

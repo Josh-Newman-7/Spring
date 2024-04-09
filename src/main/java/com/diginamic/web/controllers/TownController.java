@@ -1,30 +1,39 @@
 package com.diginamic.web.controllers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
 import com.diginamic.web.models.Town;
 
 @RestController
 @RequestMapping("/towns")
 public class TownController {
 	
+	private Set<Town> towns = new HashSet<>();
+
+    public TownController() {
+        towns.add(new Town("Nice", 343000));
+        towns.add(new Town("Carcassonne", 47800));
+        towns.add(new Town("Narbonne", 53400));
+        towns.add(new Town("Lyon", 484000));
+        towns.add(new Town("Foix", 9700));
+        towns.add(new Town("Pau", 77200));
+        towns.add(new Town("Marseille", 850700));
+        towns.add(new Town("Tarbes", 40600));
+    }
+	
 	@GetMapping
-	 public List<Town> getTowns(){
-		return new ArrayList<>(Arrays.asList(
-				new Town("Nice", 343000),
-				new Town("Carcassonne", 47800),
-				new Town("Narbonne", 53400),
-				new Town("Lyon", 484000),
-				new Town("Foix", 9700),
-				new Town("Pau", 77200),
-				new Town("Marseille", 850700),
-				new Town("Tarbes", 40600)
-				));
+	 public Set<Town> getTowns(){
+		return towns;
 	 };
+	 
+	 @PostMapping
+	 public ResponseEntity<String> postTown(@RequestBody Town town) {
+		 if(towns.contains(town)) {
+			 return new ResponseEntity<String>("La ville existe déjà", HttpStatus.OK);
+		 }
+		 towns.add(town);
+		 return new ResponseEntity<String>("Ville insérée avec succès", HttpStatus.OK);
+	 }
 }
