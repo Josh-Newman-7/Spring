@@ -2,24 +2,30 @@ package com.diginamic.web.models;
 
 import java.util.Objects;
 
+
+import jakarta.persistence.*;
+
+@Entity
 public class Town {
 	private String name;
 	private int nbHab;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY )
 	private int id;
 	
 	public int getId() {
 		return id;
 	}
-	public void setId(int id) {
-		this.id = id;
-	}
 	
-	public Town(String name, int nbHab, int id) {
+	public Town () {
+		
+	}
+	public Town(String name, int nbHab) {
 		super();
 		this.name = name;
 		this.nbHab = nbHab;
-		this.id = id;
 	}
+	
 	public String getName() {
 		return name;
 	}
