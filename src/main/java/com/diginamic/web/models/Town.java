@@ -12,6 +12,7 @@ public class Town {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY )
 	private int id;
+	private String codeDep;
 	
 	public int getId() {
 		return id;
@@ -20,10 +21,11 @@ public class Town {
 	public Town () {
 		
 	}
-	public Town(String name, int nbHab) {
+	public Town(String name, int nbHab, String codeDep) {
 		super();
 		this.name = name;
 		this.nbHab = nbHab;
+		this.codeDep = codeDep;
 	}
 	
 	public String getName() {
@@ -41,7 +43,8 @@ public class Town {
 	}
 
 	
-    @Override
+    
+	@Override
     public boolean equals(Object o) {
         if (this == o) 
         	return true;
@@ -52,8 +55,17 @@ public class Town {
         return this.id == town.id;
     }
 
-    @Override
+    
+	@Override
     public int hashCode() {
         return Objects.hash(id);
     }
+
+	public String getCodeDep() {
+		return codeDep;
+	}
+
+	public void setCodeDep(String codeDep) {
+		this.codeDep = codeDep;
+	}
 }

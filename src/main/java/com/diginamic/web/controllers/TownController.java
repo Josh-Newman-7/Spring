@@ -7,45 +7,45 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import com.diginamic.web.models.Town;
-import com.diginamic.web.services.TownService;
+import com.diginamic.web.repo.TownRepository;
 
 @RestController
 @RequestMapping("/towns")
 public class TownController {
 	
 	@Autowired
-	TownService townService;
+	TownRepository townRepository;
 	
 	@GetMapping
 	 public List<Town> getTowns(){
-		return this.townService.getTowns();
+		return (List<Town>) this.townRepository.findAll();
 	 };
 	 
 	 @GetMapping("/{id}")
 	 public Town getTownById(@PathVariable int id){
-		 return this.townService.getTownById(id);
+		 return this.townRepository.findById(id).get();
 	 };
 	 
 	 @GetMapping("/name/{name}")
 	 public Town getTownByName(@PathVariable String name){
-		 return this.townService.getTownByName(name);
+		 return this.townRepository.findByNameStartsWith(name).get(0);
 	 };
 	 
 	 @PostMapping
 	 public ResponseEntity<String> postTown(@RequestBody Town town) {
-		 this.townService.addTown(town);
+		 this.townRepository.save(town);
 		 return new ResponseEntity<String>("Ville insérée avec succès", HttpStatus.OK);
 	 }
 	 
 	 @PutMapping
 	 public ResponseEntity<String> putTown(@RequestBody Town town) {
-		 this.townService.updateTown(town);
+		 this.townRepository.save(town);
 		 return ResponseEntity.ok("Ville modifiée avec succès");
     }
 	 
 	 @DeleteMapping("/{id}")
 	 public ResponseEntity<String> deleteTown(@PathVariable int id) {
-		 this.townService.deleteTown(id);
+		 this.townRepository.deleteById(id);
          return ResponseEntity.ok("Ville suprimée avec succès");
     }
 }
