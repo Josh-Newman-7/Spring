@@ -16,9 +16,9 @@ public interface TownRepository extends CrudRepository<Town, Integer> {
 
     List<Town> findByPopulationBetween(int min, int max);
 
-    List<Town> findByDepartementAndPopulationGreaterThan(String codeDep, int nbHab);
+    List<Town> findByDepartmentAndPopulationGreaterThan(String codeDep, int nbHab);
 
-    List<Town> findByDepartementAndPopulationBetween(String codeDep, int nbHabMin, int nbHabMax);
+    List<Town> findByDepartmentAndPopulationBetween(String codeDep, int nbHabMin, int nbHabMax);
 
     List<Town> findTopNTownsByDepartement(String codeDep, Pageable pageable);
 

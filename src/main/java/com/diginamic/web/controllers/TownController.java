@@ -6,46 +6,59 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import com.diginamic.web.dto.TownDTO;
+import com.diginamic.web.mappers.TownMapper;
 import com.diginamic.web.models.Town;
-import com.diginamic.web.repo.TownRepository;
+import com.diginamic.web.services.TownService;
 
 @RestController
 @RequestMapping("/towns")
 public class TownController {
 	
 	@Autowired
-	TownRepository townRepository;
+	TownService townService;
 	
 	@GetMapping
-	 public List<Town> getTowns(){
-		return (List<Town>) this.townRepository.findAll();
+	 public List<TownDTO> getTowns(){
+		List<Town> existingTowns = townService.getTowns();
+		List<TownDTO> townsToReturn = new ArrayList<TownDTO>();
+		for(Town t : existingTowns) {
+			townsToReturn.add(TownMapper.toDto(t));
+		}
+		return townsToReturn;
 	 };
 	 
 	 @GetMapping("/{id}")
-	 public Town getTownById(@PathVariable int id){
-		 return this.townRepository.findById(id).get();
+	 public TownDTO getTownById(@PathVariable int id){
+		 return TownMapper.toDto(townService.getTownById(id));
 	 };
 	 
 	 @GetMapping("/name/{name}")
-	 public Town getTownByName(@PathVariable String name){
-		 return this.townRepository.findByNameStartsWith(name).get(0);
+	 public TownDTO getTownByName(@PathVariable String name){
+		 return TownMapper.toDto(townService.getTownByName(name));
 	 };
 	 
 	 @PostMapping
-	 public ResponseEntity<String> postTown(@RequestBody Town town) {
-		 this.townRepository.save(town);
-		 return new ResponseEntity<String>("Ville insérée avec succès", HttpStatus.OK);
+	 public ResponseEntity<String> postTown(@RequestBody TownDTO town) {
+		 if(townService.addTown(TownMapper.toBean(town))) {
+			 return new ResponseEntity<String>("Ville insérée avec succès", HttpStatus.OK);
+		 }
+		 return new ResponseEntity<String>("Erreur lors de l'insertion d'une nouvelle ville", HttpStatus.BAD_REQUEST);
 	 }
 	 
 	 @PutMapping
-	 public ResponseEntity<String> putTown(@RequestBody Town town) {
-		 this.townRepository.save(town);
-		 return ResponseEntity.ok("Ville modifiée avec succès");
+	 public ResponseEntity<String> putTown(@RequestBody TownDTO town) {
+		 if(townService.updateTown(TownMapper.toBean(town))) {
+			 return new ResponseEntity<String>("Ville modifiée avec succès", HttpStatus.OK);
+		 }
+		 return new ResponseEntity<String>("Erreur lors de la modification d'une ville", HttpStatus.BAD_REQUEST);
     }
 	 
 	 @DeleteMapping("/{id}")
 	 public ResponseEntity<String> deleteTown(@PathVariable int id) {
-		 this.townRepository.deleteById(id);
-         return ResponseEntity.ok("Ville suprimée avec succès");
+		 if(townService.deleteTown(id)) {
+			 return new ResponseEntity<String>("Ville supprimée avec succès", HttpStatus.OK);
+		 }
+		 return new ResponseEntity<String>("Erreur lors de la suppression d'une ville", HttpStatus.BAD_REQUEST);
     }
 }
