@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.diginamic.web.dto.DepartmentDTO;
+import com.diginamic.web.exceptions.CustomException;
 import com.diginamic.web.mappers.DepartmentMapper;
 import com.diginamic.web.models.*;
 import com.diginamic.web.services.DepartmentService;
@@ -37,17 +38,26 @@ public class DepartmentController {
 
     @PostMapping
     public ResponseEntity<String> addDepartment(@RequestBody DepartmentDTO department) {
-    	if(departmentService.addDepartment(DepartmentMapper.toBean(department))) {
-			 return new ResponseEntity<String>("Départment inséré avec succès", HttpStatus.OK);
-		 }
+    	try {
+			if(departmentService.addDepartment(DepartmentMapper.toBean(department))) {
+				 return new ResponseEntity<String>("Départment inséré avec succès", HttpStatus.OK);
+			 }
+		} catch (CustomException e) {
+			e.printStackTrace();
+		}
 		 return new ResponseEntity<String>("Erreur lors de l'insertion d'un nouveau département", HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping
     public ResponseEntity<String> updateDepartment(@RequestBody DepartmentDTO updatedDepartment) {
-    	if(departmentService.updateDepartment(DepartmentMapper.toBean(updatedDepartment))) {
-			 return new ResponseEntity<String>("Départment modifié avec succès", HttpStatus.OK);
-		 }
+    	try {
+			if(departmentService.updateDepartment(DepartmentMapper.toBean(updatedDepartment))) {
+				 return new ResponseEntity<String>("Départment modifié avec succès", HttpStatus.OK);
+			 }
+		} catch (CustomException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		 return new ResponseEntity<String>("Erreur lors de la modification d'un département", HttpStatus.BAD_REQUEST);
     }
 

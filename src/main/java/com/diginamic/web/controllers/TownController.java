@@ -7,6 +7,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import com.diginamic.web.dto.TownDTO;
+import com.diginamic.web.exceptions.CustomException;
 import com.diginamic.web.mappers.TownMapper;
 import com.diginamic.web.models.Town;
 import com.diginamic.web.services.TownService;
@@ -40,17 +41,25 @@ public class TownController {
 	 
 	 @PostMapping
 	 public ResponseEntity<String> postTown(@RequestBody TownDTO town) {
-		 if(townService.addTown(TownMapper.toBean(town))) {
-			 return new ResponseEntity<String>("Ville insérée avec succès", HttpStatus.OK);
+		 try {
+			 if(townService.addTown(TownMapper.toBean(town))) {
+				 return new ResponseEntity<String>("Ville insérée avec succès", HttpStatus.OK);
+			 }
+		 } catch (CustomException e) {
+			 e.printStackTrace();
 		 }
 		 return new ResponseEntity<String>("Erreur lors de l'insertion d'une nouvelle ville", HttpStatus.BAD_REQUEST);
 	 }
 	 
 	 @PutMapping
 	 public ResponseEntity<String> putTown(@RequestBody TownDTO town) {
-		 if(townService.updateTown(TownMapper.toBean(town))) {
-			 return new ResponseEntity<String>("Ville modifiée avec succès", HttpStatus.OK);
-		 }
+		 try {
+			if(townService.updateTown(TownMapper.toBean(town))) {
+				 return new ResponseEntity<String>("Ville modifiée avec succès", HttpStatus.OK);
+			 }
+		} catch (CustomException e) {
+			e.printStackTrace();
+		}
 		 return new ResponseEntity<String>("Erreur lors de la modification d'une ville", HttpStatus.BAD_REQUEST);
     }
 	 

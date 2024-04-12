@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.diginamic.web.exceptions.CustomException;
 import com.diginamic.web.models.Town;
 import com.diginamic.web.repo.TownRepository;
 
@@ -26,7 +27,10 @@ public class TownService {
         return townRepository.findByNameStartsWith(name).get(0) != null ? townRepository.findByNameStartsWith(name).get(0) : null;
     }
 
-    public boolean addTown(Town town) {
+    public boolean addTown(Town town) throws CustomException{
+    	
+    	this.verifyTown(town);
+    	
         Town t = townRepository.findByNameStartsWith(town.getName()).get(0);
         if(t != null) {
         	return false;
@@ -35,7 +39,9 @@ public class TownService {
         return true;
     }
 
-    public boolean updateTown(Town updatedTown) {
+    public boolean updateTown(Town updatedTown) throws CustomException{
+    	this.verifyTown(updatedTown);
+        
     	Town tDB = townRepository.findById(updatedTown.getId()).get();
         if(tDB == null) {
         	return false;
@@ -52,6 +58,19 @@ public class TownService {
         	return false;
         }
         townRepository.deleteById(id);
+        return true;
+    }
+    
+    private boolean verifyTown(Town town) throws CustomException{
+    	if (town.getNbHab() < 10) {
+            throw new CustomException("La ville doit avoir au moins 10 habitants.");
+        }
+        if (town.getName().length() < 2) {
+            throw new CustomException("Le nom de la ville doit contenir au moins 2 lettres.");
+        }
+        if (town.getDepartment().getCode().length() != 2) {
+            throw new CustomException("Le code département doit avoir exactement 2 caractères.");
+        }
         return true;
     }
 }
