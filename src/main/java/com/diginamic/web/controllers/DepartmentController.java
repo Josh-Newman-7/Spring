@@ -11,8 +11,16 @@ import com.diginamic.web.mappers.DepartmentMapper;
 import com.diginamic.web.models.*;
 import com.diginamic.web.services.DepartmentService;
 
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/departments")
@@ -35,6 +43,25 @@ public class DepartmentController {
     public DepartmentDTO getDepartmentById(@PathVariable int id) {
     	return DepartmentMapper.toDto(departmentService.getDepartmentById(id));
     }
+    
+    @GetMapping("/exportCSV")
+    public void exportCSV(HttpServletResponse response) throws IOException {
+		List<Department> departments = departmentService.getDepartments();
+
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename=\"departments.csv\"");
+
+        try {
+            for (Department department : departments) {
+                String csvLine = department.getCode() + "," + department.getName() + "\n";
+                response.getOutputStream().write(csvLine.getBytes());
+            }
+
+            response.flushBuffer();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }  
+    }
 
     @PostMapping
     public ResponseEntity<String> addDepartment(@RequestBody DepartmentDTO department) {
@@ -55,7 +82,6 @@ public class DepartmentController {
 				 return new ResponseEntity<String>("Départment modifié avec succès", HttpStatus.OK);
 			 }
 		} catch (CustomException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		 return new ResponseEntity<String>("Erreur lors de la modification d'un département", HttpStatus.BAD_REQUEST);
