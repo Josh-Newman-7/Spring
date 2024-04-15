@@ -23,6 +23,12 @@ public class Department {
 		this.name = name;
 		this.towns = towns;
 	}
+	
+	public Department(String code, String name) {
+		super();
+		this.code = code;
+		this.name = name;
+	}
 
 	public Department() {}
 

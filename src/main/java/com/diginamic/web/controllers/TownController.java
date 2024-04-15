@@ -47,24 +47,24 @@ public class TownController {
 	 };
 	 
 	 @GetMapping("/{name}/fiche")
-	    public void exportTownCSV(@PathVariable String name, HttpServletResponse response) throws IOException, DocumentException {
-	        Town town = townService.getTownByName(name);
-	        if (town == null) {
-	            response.setStatus(HttpStatus.NOT_FOUND.value());
-	            response.getWriter().write("Ville non trouvée.");
-	            return;
-	        }
+    public void exportTownCSV(@PathVariable String name, HttpServletResponse response) throws IOException, DocumentException {
+        Town town = townService.getTownByName(name);
+        if (town == null) {
+            response.setStatus(HttpStatus.NOT_FOUND.value());
+            response.getWriter().write("Ville non trouvée.");
+            return;
+        }
 
-	        response.setHeader("Content-Disposition", "attachment; filename=\"" + town.getName() + ".pdf\"");
-	        Document document = new Document(PageSize.A4);
-	        PdfWriter.getInstance(document, response.getOutputStream());
-	        document.open();
-	        document.add(new Paragraph("Nom de la ville : " + town.getName()));
-	        document.add(new Paragraph("Nombre d'habitants : " + town.getNbHab()));
-	        document.add(new Paragraph("Code département : " + town.getDepartment().getCode()));
-	        document.add(new Paragraph("Nom du département : " + town.getDepartment().getName()));
-	        document.close();
-	    }
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + town.getName() + ".pdf\"");
+        Document document = new Document(PageSize.A4);
+        PdfWriter.getInstance(document, response.getOutputStream());
+        document.open();
+        document.add(new Paragraph("Nom de la ville : " + town.getName()));
+        document.add(new Paragraph("Nombre d'habitants : " + town.getNbHab()));
+        document.add(new Paragraph("Code département : " + town.getDepartment().getCode()));
+        document.add(new Paragraph("Nom du département : " + town.getDepartment().getName()));
+        document.close();
+    }
 	 
 	 @PostMapping
 	 public ResponseEntity<String> postTown(@RequestBody TownDTO town) {

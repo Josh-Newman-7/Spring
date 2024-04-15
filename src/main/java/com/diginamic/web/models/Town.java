@@ -12,7 +12,6 @@ public class Town {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY )
 	private int id;
-	private String codeDep;
 	
 	@ManyToOne
     private Department department;
@@ -35,11 +34,11 @@ public class Town {
 	public Town () {
 		
 	}
-	public Town(String name, int nbHab, String codeDep) {
+	public Town(String name, int nbHab, Department department) {
 		super();
 		this.name = name;
 		this.nbHab = nbHab;
-		this.codeDep = codeDep;
+		this.department = department;
 	}
 	
 	public String getName() {
@@ -74,14 +73,4 @@ public class Town {
     public int hashCode() {
         return Objects.hash(id);
     }
-
-	public String getCodeDep() {
-		return codeDep;
-	}
-
-	public void setCodeDep(String codeDep) {
-		this.codeDep = codeDep;
-	}
-
-
 }

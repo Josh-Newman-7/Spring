@@ -14,7 +14,6 @@ public class TownMapper {
 	public static TownDTO toDto(Town town) {
         TownDTO dto = new TownDTO();
         dto.setName(town.getName());
-        dto.setTownCode(town.getCodeDep());
         dto.setPopulation(town.getNbHab());
         dto.setDepartmentCode(town.getDepartment().getCode());
         dto.setDepartmentName(town.getDepartment().getName());
